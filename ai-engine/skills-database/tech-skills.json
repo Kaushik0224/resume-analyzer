@@ -1,0 +1,16 @@
+{
+  "roles": {
+    "Software Engineer": [
+      "Java", "Python", "JavaScript", "React", "Spring Boot", "Git", "Docker", "Kubernetes", "SQL", "NoSQL", "AWS", "Azure", "CI/CD"
+    ],
+    "Data Scientist": [
+      "Python", "R", "SQL", "Machine Learning", "Deep Learning", "Pandas", "NumPy", "TensorFlow", "PyTorch", "Tableau"
+    ],
+    "Product Manager": [
+      "Agile", "Scrum", "Jira", "Product Roadmap", "User Research", "A/B Testing", "Data Analysis", "Stakeholder Management"
+    ]
+  },
+  "softSkills": [
+    "Communication", "Leadership", "Problem Solving", "Teamwork", "Time Management", "Adaptability"
+  ]
+}

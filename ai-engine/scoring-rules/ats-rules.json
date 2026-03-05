@@ -1,0 +1,23 @@
+{
+    "scoringWeights": {
+        "keywordDensity": 0.40,
+        "quantifiableMetrics": 0.30,
+        "formattingReadability": 0.20,
+        "actionVerbs": 0.10
+    },
+    "penalties": {
+        "missingContactInfo": -10,
+        "longParagraphs": -5,
+        "buzzwordOverload": -5,
+        "unrecognizedSections": -15
+    },
+    "bonuses": {
+        "linksToPortfolio": 5,
+        "certificationsPresent": 5
+    },
+    "thresholds": {
+        "excellent": 80,
+        "good": 60,
+        "needsImprovement": 40
+    }
+}

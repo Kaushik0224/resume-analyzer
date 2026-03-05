@@ -1,0 +1,28 @@
+# Node
+node_modules/
+npm-debug.log*
+dist/
+.vite/
+
+# Maven / Java
+backend/target/
+*.class
+*.jar
+*.war
+*.log
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+*.env
+
+# Build output
+build/
+out/
