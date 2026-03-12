@@ -1,0 +1,10 @@
+com\resumeanalyzer\controller\ResumeController.class
+com\resumeanalyzer\repository\AnalysisReportRepository.class
+com\resumeanalyzer\model\AnalysisReport.class
+com\resumeanalyzer\service\GroqAIService.class
+com\resumeanalyzer\config\WebConfig.class
+com\resumeanalyzer\ResumeAnalyzerApplication.class
+com\resumeanalyzer\model\AnalysisResult.class
+com\resumeanalyzer\service\PromptBuilderService.class
+com\resumeanalyzer\service\TextExtractionService.class
+com\resumeanalyzer\service\ResultParserService.class

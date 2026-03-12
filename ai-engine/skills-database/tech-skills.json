@@ -1,0 +1,13 @@
+{
+  "keywords": {
+    "Java": ["Spring Boot", "JPA", "Hibernate", "Maven", "Gradle"],
+    "React": ["Redux", "Hooks", "Vite", "Next.js", "Context API"],
+    "Python": ["Django", "Flask", "FastAPI", "Pandas", "NumPy"],
+    "Cloud": ["AWS", "Azure", "GCP", "Docker", "Kubernetes", "CI/CD"]
+  },
+  "roles": {
+    "Software Engineer": ["Java", "Python", "C++", "Algorithms", "Data Structures"],
+    "Frontend Developer": ["React", "JavaScript", "HTML", "CSS", "TypeScript"],
+    "Backend Developer": ["Java", "Node.js", "Python", "SQL", "REST API", "Microservices"]
+  }
+}

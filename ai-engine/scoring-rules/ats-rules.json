@@ -1,0 +1,19 @@
+{
+    "weights": {
+        "skills_match": 40,
+        "experience_relevance": 25,
+        "project_complexity": 20,
+        "keyword_density": 10,
+        "structure_score": 5
+    },
+    "penalties": {
+        "missing_education": -10,
+        "no_contact_info": -15,
+        "formatting_errors": -5
+    },
+    "thresholds": {
+        "strong_hire": 85,
+        "potential_hire": 70,
+        "needs_improvement": 50
+    }
+}
