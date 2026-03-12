@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Resume Analyzer Architecture</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #c8c8c8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px;
+            gap: 12px;
+        }
+
+        .dl-btn {
+            background: #2563eb;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 28px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .dl-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* SLIDE */
+        #slide {
+            background: #fff;
+            width: 1100px;
+            padding: 20px 24px 18px;
+            box-shadow: 0 2px 22px rgba(0, 0, 0, 0.18);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 23px;
+            font-weight: 900;
+            color: #111;
+            margin-bottom: 14px;
+        }
+
+        /* TOP ROW */
+        .top-row {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        /* UI Panel */
+        .ui-panel {
+            flex: 1;
+            border: 1.5px dashed #aaa;
+            border-radius: 5px;
+            padding: 8px 10px 10px;
+        }
+
+        .panel-tag {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .screens-row {
+            display: flex;
+            gap: 9px;
+        }
+
+        /* Screen cards */
+        .sc {
+            flex: 1;
+            border: 1.5px solid #ced6e0;
+            border-radius: 5px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+        }
+
+        .sc-bar {
+            background: #1b3a5c;
+            color: #fff;
+            font-size: 9.5px;
+            font-weight: 700;
+            padding: 5px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sc-bar .d {
+            display: flex;
+            gap: 2px;
+        }
+
+        .sc-bar .d span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            display: block;
+        }
+
+        .sc-body {
+            padding: 8px 8px 7px;
+        }
+
+        .sc-lbl {
+            text-align: center;
+            font-size: 10.5px;
+            font-weight: 600;
+            color: #333;
+            margin-top: 5px;
+        }
+
+        /* login internals */
+        .logo {
+            text-align: center;
+            font-size: 18px;
+            color: #2563eb;
+            margin-bottom: 3px;
+        }
+
+        .app {
+            text-align: center;
+            font-size: 8px;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        .fi {
+            background: #f2f4f7;
+            border: 1px solid #dde3ec;
+            border-radius: 3px;
+            height: 15px;
+            font-size: 8px;
+            color: #999;
+            padding: 1px 5px;
+            line-height: 15px;
+            margin-bottom: 4px;
+        }
+
+        .fb {
+            background: #2563eb;
+            color: #fff;
+            text-align: center;
+            font-size: 9.5px;
+            font-weight: 700;
+            border-radius: 20px;
+            padding: 4px 0;
+            margin-top: 5px;
+        }
+
+        .flink {
+            text-align: center;
+            font-size: 7.5px;
+            color: #2563eb;
+            margin-top: 4px;
+        }
+
+        .fsep {
+            text-align: center;
+            font-size: 7px;
+            color: #ccc;
+            margin: 3px 0;
+        }
+
+        .foauth {
+            text-align: center;
+            font-size: 7.5px;
+            color: #555;
+            background: #f2f4f7;
+            border: 1px solid #dde;
+            border-radius: 3px;
+            padding: 3px 0;
+            margin-top: 3px;
+        }
+
+        /* dashboard internals */
+        .dstats {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 5px;
+        }
+
+        .dstat {
+            flex: 1;
+            border: 1px solid #e2e8f0;
+            border-radius: 3px;
+            padding: 3px 3px;
+            background: #f9fafb;
+        }
+
+        .dstat .n {
+            font-size: 10px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .dstat .t {
+            font-size: 7px;
+            color: #aaa;
+        }
+
+        .dlabel {
+            font-size: 7.5px;
+            color: #bbb;
+            margin-bottom: 3px;
+        }
+
+        .dbars {
+            display: flex;
+            gap: 2px;
+            align-items: flex-end;
+            height: 36px;
+        }
+
+        .dbar {
+            flex: 1;
+            border-radius: 1px 1px 0 0;
+        }
+
+        .dtags {
+            display: flex;
+            gap: 3px;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
+
+        .dtag {
+            background: #eff6ff;
+            border-radius: 3px;
+            padding: 1px 5px;
+            font-size: 7px;
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        /* upload internals */
+        .udrop {
+            border: 1.5px dashed #93c5fd;
+            border-radius: 4px;
+            padding: 10px 4px;
+            text-align: center;
+            color: #3b82f6;
+            font-size: 8px;
+            font-weight: 600;
+            background: #eff6ff;
+            margin-bottom: 6px;
+        }
+
+        .ufield {
+            background: #f2f4f7;
+            border: 1px solid #dde3ec;
+            border-radius: 3px;
+            height: 28px;
+            font-size: 7.5px;
+            color: #aaa;
+            padding: 4px 5px;
+            margin-bottom: 5px;
+        }
+
+        .utags {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 5px;
+        }
+
+        .utag {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 3px;
+            padding: 2px 6px;
+            font-size: 7.5px;
+            color: #64748b;
+        }
+
+        .urow {
+            display: flex;
+            gap: 4px;
+        }
+
+        .ubtn {
+            flex: 0.8;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 3px;
+            padding: 3px 0;
+            font-size: 8px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .ubtna {
+            flex: 1.2;
+            background: #2563eb;
+            border-radius: 3px;
+            padding: 3px 0;
+            font-size: 8px;
+            text-align: center;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        /* analysis internals */
+        .ascores {
+            display: flex;
+            justify-content: space-around;
+            margin: 5px 0 6px;
+        }
+
+        .asc {
+            text-align: center;
+        }
+
+        .asc .c {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2.5px solid;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .asc .l {
+            font-size: 7.5px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .aline {
+            height: 7px;
+            border-radius: 3px;
+            background: #e5e7eb;
+            margin-bottom: 3px;
+        }
+
+        .atag {
+            display: flex;
+            gap: 2px;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
+
+        .abadge {
+            background: #fee2e2;
+            border-radius: 3px;
+            padding: 1px 5px;
+            font-size: 7px;
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .abadgeb {
+            background: #dbeafe;
+            border-radius: 3px;
+            padding: 1px 5px;
+            font-size: 7px;
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        /* Backend */
+        .bknd {
+            width: 285px;
+            flex-shrink: 0;
+        }
+
+        .bknd .panel-tag {
+            text-align: right;
+        }
+
+        .mlayer {
+            border-radius: 7px;
+            color: #fff;
+            padding: 10px 13px 12px;
+            margin-bottom: 4px;
+        }
+
+        .mlayer-t {
+            font-size: 13.5px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .chips {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .chip {
+            background: rgba(255, 255, 255, 0.22);
+            border-radius: 4px;
+            padding: 4px 9px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .marr {
+            text-align: center;
+            color: #888;
+            font-size: 16px;
+            line-height: 1;
+            margin: 3px 0;
+        }
+
+        .ctrl {
+            background: #c0392b;
+        }
+
+        .svc {
+            background: #e67e22;
+        }
+
+        .repo {
+            background: #27ae60;
+        }
+
+        /* BOTTOM ROW */
+        .bot-row {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        /* DB Panel */
+        .db-panel {
+            width: 225px;
+            flex-shrink: 0;
+            border: 1.5px dashed #aaa;
+            border-radius: 5px;
+            padding: 8px 9px 10px;
+        }
+
+        .tbl {
+            margin-bottom: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1.5px solid #ddd;
+        }
+
+        .tbl:last-child {
+            margin-bottom: 0;
+        }
+
+        .th {
+            padding: 5px 8px;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .th.r {
+            background: #c0392b;
+        }
+
+        .th.g {
+            background: #27ae60;
+        }
+
+        .th.b {
+            background: #2471a3;
+        }
+
+        .thr {
+            display: flex;
+            background: #f0f0f0;
+            font-size: 8.5px;
+            font-weight: 700;
+            color: #666;
+            padding: 2px 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tr {
+            display: flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-bottom: 1px solid #f2f2f2;
+            font-size: 10px;
+        }
+
+        .tr:last-child {
+            border-bottom: none;
+        }
+
+        .tr .ki {
+            color: #f39c12;
+            font-size: 9px;
+            margin-right: 3px;
+        }
+
+        .tr .ni {
+            color: #bbb;
+            font-size: 9px;
+            margin-right: 3px;
+        }
+
+        .tr .cn {
+            flex: 1;
+            color: #222;
+            font-weight: 500;
+        }
+
+        .tr .ct {
+            color: #888;
+            font-size: 9px;
+        }
+
+        /* data rows (sample data like Smart Notes) */
+        .dr {
+            display: flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 9px;
+        }
+
+        .dr:last-child {
+            border-bottom: none;
+        }
+
+        .dr .dc {
+            flex: 1;
+            color: #444;
+        }
+
+        .dr .dv {
+            color: #777;
+            font-size: 8.5px;
+        }
+
+        .dr-h {
+            display: flex;
+            align-items: center;
+            padding: 1px 8px;
+            background: #f8f8f8;
+            border-bottom: 1px solid #eee;
+            font-size: 8px;
+            font-weight: 700;
+            color: #555;
+        }
+
+        /* Arch center */
+        .arch {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .arch-title {
+            font-size: 13.5px;
+            font-weight: 800;
+            margin-top: 7px;
+            text-align: center;
+        }
+
+        .arch-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .arch-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .arch-lbl {
+            font-size: 10px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.3;
+            max-width: 90px;
+        }
+
+        .arch-varr {
+            font-size: 22px;
+            color: #2a4a6a;
+            text-align: center;
+            line-height: 1;
+            margin: 4px 0;
+        }
+
+        .arch-bot {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            margin-top: 10px;
+        }
+
+        .arch-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .sbar {
+            display: flex;
+            border-radius: 6px;
+            overflow: hidden;
+            width: 330px;
+            margin-top: 12px;
+        }
+
+        .sbar-s {
+            flex: 1;
+            text-align: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            padding: 8px 2px;
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .sbar-s:last-child {
+            border-right: none;
+        }
+
+        /* Badge nodes */
+        .badge-node {
+            border-radius: 10px;
+            padding: 10px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16);
+        }
+
+        /* System Flow */
+        .flow {
+            width: 178px;
+            flex-shrink: 0;
+        }
+
+        .flow-h {
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 9px;
+            color: #111;
+        }
+
+        .fi2 {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #222;
+        }
+
+        .fn {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .fsub {
+            font-size: 8.5px;
+            color: #888;
+            margin-top: 1px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="dl-btn" onclick="downloadImage()">⬇ Download as Image</button>
+
+    <div id="slide">
+        <h1>Resume Analyzer (Spring Boot + React + AI) Prototype</h1>
+
+        <!-- TOP ROW -->
+        <div class="top-row">
+
+            <!-- UI Screens -->
+            <div class="ui-panel">
+                <div class="panel-tag">— UI Screens</div>
+                <div class="screens-row">
+
+                    <!-- Login -->
+                    <div>
+                        <div class="sc">
+                            <div class="sc-bar">Login Page <div class="d"><span></span><span></span><span></span></div>
+                            </div>
+                            <div class="sc-body">
+                                <div class="logo">⚙️</div>
+                                <div class="app">Resume Analyzer</div>
+                                <div class="fi">Email address</div>
+                                <div class="fi">Password</div>
+                                <div class="fb">Login</div>
+                                <div class="fsep">— or continue with —</div>
+                                <div class="foauth">🔗 Login with Google</div>
+                                <div class="flink">Forgot password? Reset it</div>
+                            </div>
+                        </div>
+                        <div class="sc-lbl">Login Page (JWT)</div>
+                    </div>
+
+                    <!-- Dashboard -->
+                    <div>
+                        <div class="sc">
+                            <div class="sc-bar">Dashboard <div class="d"><span></span><span></span><span></span></div>
+                            </div>
+                            <div class="sc-body">
+                                <div class="dstats">
+                                    <div class="dstat">
+                                        <div class="n">1,205</div>
+                                        <div class="t">Resumes</div>
+                                    </div>
+                                    <div class="dstat">
+                                        <div class="n">87%</div>
+                                        <div class="t">Avg Score</div>
+                                    </div>
+                                    <div class="dstat">
+                                        <div class="n" style="color:#16a34a">+3.2</div>
+                                        <div class="t">Growth</div>
+                                    </div>
+                                    <div class="dstat">
+                                        <div class="n" style="color:#dc2626">3</div>
+                                        <div class="t">Alerts</div>
+                                    </div>
+                                </div>
+                                <div class="dlabel">Analysis Trends (last 30 days)</div>
+                                <div class="dbars">
+                                    <div class="dbar" style="height:20px;background:#2563eb"></div>
+                                    <div class="dbar" style="height:30px;background:#16a34a"></div>
+                                    <div class="dbar" style="height:14px;background:#f59e0b"></div>
+                                    <div class="dbar" style="height:36px;background:#2563eb"></div>
+                                    <div class="dbar" style="height:24px;background:#8b5cf6"></div>
+                                    <div class="dbar" style="height:28px;background:#dc2626"></div>
+                                </div>
+                                <div class="dtags">
+                                    <span class="dtag">Recent Uploads</span>
+                                    <span class="dtag">Filter by Score</span>
+                                    <span class="dtag">Export CSV</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sc-lbl">Dashboard (Overview)</div>
+                    </div>
+
+                    <!-- Upload Resume -->
+                    <div>
+                        <div class="sc">
+                            <div class="sc-bar">Upload Resume <div class="d"><span></span><span></span><span></span>
+                                </div>
+                            </div>
+                            <div class="sc-body">
+                                <div class="udrop">
+                                    <div style="font-size:20px;margin-bottom:3px">📄</div>
+                                    Drop PDF / DOCX here<br>
+                                    <span style="font-size:7px;color:#93c5fd">or click to browse files</span>
+                                </div>
+                                <div style="font-size:8px;color:#888;margin-bottom:3px;font-weight:600">Job Description
+                                </div>
+                                <div class="ufield">Paste the target job description here...</div>
+                                <div class="utags">
+                                    <span class="utag">📋 PDF</span>
+                                    <span class="utag">📋 DOCX</span>
+                                    <span class="utag">📋 TXT</span>
+                                </div>
+                                <div class="urow">
+                                    <div class="ubtn">Clear</div>
+                                    <div class="ubtna">Analyze ▶</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sc-lbl">Upload Resume</div>
+                    </div>
+
+                    <!-- Analysis Results -->
+                    <div>
+                        <div class="sc">
+                            <div class="sc-bar">Analysis Results <div class="d"><span></span><span></span><span></span>
+                                </div>
+                            </div>
+                            <div class="sc-body">
+                                <div class="ascores">
+                                    <div class="asc">
+                                        <div class="c" style="border-color:#16a34a;color:#16a34a">76%</div>
+                                        <div class="l">ATS Score</div>
+                                    </div>
+                                    <div class="asc">
+                                        <div class="c" style="border-color:#2563eb;color:#2563eb">88%</div>
+                                        <div class="l">Skills</div>
+                                    </div>
+                                    <div class="asc">
+                                        <div class="c" style="border-color:#dc2626;color:#dc2626">52%</div>
+                                        <div class="l">Gap</div>
+                                    </div>
+                                </div>
+                                <div class="aline" style="width:95%"></div>
+                                <div class="aline" style="width:78%"></div>
+                                <div class="aline" style="width:62%"></div>
+                                <div class="atag">
+                                    <span class="abadge">Missing: Docker</span>
+                                    <span class="abadge">AWS</span>
+                                    <span class="abadgeb">✓ Java</span>
+                                    <span class="abadgeb">✓ Spring</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sc-lbl">Match Result (Detailed)</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Backend Structure -->
+            <div class="bknd">
+                <div class="panel-tag">Backend Structure (MVC)</div>
+                <div class="mlayer ctrl">
+                    <div class="mlayer-t">Controller Layer</div>
+                    <div class="chips">
+                        <span class="chip">ResumeController</span>
+                        <span class="chip">AuthController</span>
+                        <span class="chip">ParsingController</span>
+                    </div>
+                </div>
+                <div class="marr">↓</div>
+                <div class="mlayer svc">
+                    <div class="mlayer-t">Service Layer</div>
+                    <div class="chips">
+                        <span class="chip">ResumeService</span>
+                        <span class="chip">AIService</span>
+                        <span class="chip">ParsingService</span>
+                        <span class="chip">ScoringService</span>
+                    </div>
+                </div>
+                <div class="marr">↓</div>
+                <div class="mlayer repo">
+                    <div class="mlayer-t">Repository Layer</div>
+                    <div class="chips">
+                        <span class="chip">ResumeRepository</span>
+                        <span class="chip">UserRepository</span>
+                        <span class="chip">AnalysisRepository</span>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /top-row -->
+
+        <!-- BOTTOM ROW -->
+        <div class="bot-row">
+
+            <!-- Database Design -->
+            <div class="db-panel">
+                <div class="panel-tag">— Database Design</div>
+
+                <!-- Users Table -->
+                <div class="tbl">
+                    <div class="th r">Users Table</div>
+                    <div class="thr"><span style="flex:1">Column</span><span>Type</span></div>
+                    <div class="tr"><span class="ki">🔑</span><span class="cn">id</span><span class="ct">Long</span>
+                    </div>
+                    <div class="tr"><span class="ni">▭</span><span class="cn">name</span><span class="ct">String</span>
+                    </div>
+                    <div class="tr"><span class="ni">▭</span><span class="cn">email</span><span class="ct">String</span>
+                    </div>
+                    <div class="tr"><span class="ni">▭</span><span class="cn">password</span><span
+                            class="ct">String</span></div>
+                    <div class="tr"><span class="ni">▭</span><span class="cn">created_at</span><span
+                            class="ct">Date</span></div>
+                </div>
+
+                <!-- Resumes Table -->
+                <div class="tbl">
+                    <div class="th g">Resumes Table</div>
+                    <div class="tr"><span class="ki">🔑</span><span class="cn">id</span><span class="ct">Long</span>
+                    </div>
+                    <div class="tr"><span class="ni">▭</span><span class="cn">user_id</span><span class="ct">Long</span>
+                    </div>
+                    <div class="tr"><span class="ni">▭</span><span class="cn">file_path</span><span
+                            class="ct">String</span></div>
+                    <div class="tr"><span class="ni">▭</span><span class="cn">file_name</span><span
+                            class="ct">String</span></div>
+                    <div class="tr"><span class="ni">▭</span><span class="cn">upload_date</span><span
+                            class="ct">Date</span></div>
+                </div>
+
+                <!-- Analysis Table -->
+                <div class="tbl">
+                    <div class="th b">Analysis Table</div>
+                    <div class="thr"><span style="flex:1">Column</span><span>Type</span></div>
+                    <div class="tr"><span class="ki">🔑</span><span class="cn">id</span><span class="ct">Long</span>
+                    </div>
+                    <div class="tr"><span class="ni">▭</span><span class="cn">resume_id</span><span
+                            class="ct">Long</span></div>
+                    <div class="tr"><span class="ni">▭</span><span class="cn">match_score</span><span
+                            class="ct">Double</span></div>
+                    <div class="tr"><span class="ni">▭</span><span class="cn">skill_gaps</span><span
+                            class="ct">JSON</span></div>
+                    <div class="tr"><span class="ni">▭</span><span class="cn">suggestions</span><span class="ct">JSON
+                            String</span></div>
+                </div>
+            </div>
+
+            <!-- Architecture Center -->
+            <div class="arch">
+                <div class="arch-flow">
+
+                    <!-- Spring Security -->
+                    <div class="arch-node">
+                        <div class="badge-node" style="background:#1a6fa8;">
+                            <svg width="38" height="38" viewBox="0 0 24 24" fill="none">
+                                <rect x="5" y="11" width="14" height="10" rx="2" fill="#fff" />
+                                <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="#fff" stroke-width="2"
+                                    stroke-linecap="round" />
+                                <circle cx="12" cy="16" r="1.5" fill="#1a6fa8" />
+                            </svg>
+                            <div style="color:#fff;font-size:10.5px;font-weight:700;text-align:center;line-height:1.3">
+                                Spring Security<br>&amp; JWT</div>
+                        </div>
+                    </div>
+
+                    <div class="arch-varr">↕</div>
+
+                    <!-- Spring Boot API -->
+                    <div class="arch-node">
+                        <div class="badge-node" style="background:#2d8a4e;">
+                            <div style="display:flex;gap:8px;align-items:center">
+                                <svg width="34" height="34" viewBox="0 0 100 100">
+                                    <ellipse cx="50" cy="50" rx="46" ry="46" fill="#6db33f" />
+                                    <path d="M28 72 Q50 18 80 28 Q58 72 28 72Z" fill="#fff" opacity="0.92" />
+                                    <path d="M33 70 Q55 56 76 36" stroke="#6db33f" stroke-width="3.5" fill="none" />
+                                </svg>
+                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                                    <rect x="3" y="5" width="3.5" height="15" rx="1" fill="#fff" />
+                                    <rect x="8.5" y="8" width="3.5" height="12" rx="1" fill="#fff" />
+                                    <rect x="14" y="11" width="3.5" height="9" rx="1" fill="#fff" />
+                                    <rect x="19.5" y="7" width="1.5" height="13" rx="1" fill="#fff" />
+                                </svg>
+                            </div>
+                            <div style="color:#fff;font-size:10.5px;font-weight:700;text-align:center;line-height:1.3">
+                                REST API<br>Spring Boot</div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom row -->
+                    <div class="arch-bot">
+
+                        <!-- MySQL -->
+                        <div class="arch-col">
+                            <div class="arch-varr" style="font-size:18px">↕</div>
+                            <div class="arch-node">
+                                <svg width="56" height="62" viewBox="0 0 52 58">
+                                    <ellipse cx="26" cy="10" rx="22" ry="8" fill="#00758f" />
+                                    <rect x="4" y="10" width="44" height="36" fill="#00758f" />
+                                    <ellipse cx="26" cy="46" rx="22" ry="8" fill="#005c70" />
+                                    <ellipse cx="26" cy="10" rx="22" ry="8" fill="#00a8bf" />
+                                    <ellipse cx="26" cy="19" rx="22" ry="8" fill="#0090a8" opacity="0.55" />
+                                    <ellipse cx="26" cy="28" rx="22" ry="8" fill="#007890" opacity="0.45" />
+                                    <path d="M35 5 Q42 1 46 5" stroke="#fff" stroke-width="1.5" fill="none"
+                                        opacity="0.6" />
+                                </svg>
+                                <div
+                                    style="background:#00758f;color:#fff;font-size:8px;font-weight:700;padding:2px 7px;border-radius:3px;margin-top:2px">
+                                    MySQL</div>
+                                <div class="arch-lbl" style="font-size:9.5px;margin-top:3px">MySQL<br>Database</div>
+                            </div>
+                        </div>
+
+                        <!-- Apache Tika -->
+                        <div class="arch-col">
+                            <div class="arch-varr" style="font-size:18px">↕</div>
+                            <div class="arch-node">
+                                <div
+                                    style="background:#fef3c7;border:2.5px solid #d97706;border-radius:50%;width:62px;height:62px;display:flex;align-items:center;justify-content:center;">
+                                    <svg width="38" height="38" viewBox="0 0 24 24" fill="none">
+                                        <circle cx="12" cy="12" r="3" fill="#d97706" />
+                                        <path
+                                            d="M12 2v2.5M12 19.5V22M4.22 4.22l1.77 1.77M18.01 18.01l1.77 1.77M2 12h2.5M19.5 12H22M4.22 19.78l1.77-1.77M18.01 5.99l1.77-1.77"
+                                            stroke="#d97706" stroke-width="2" stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <div class="arch-lbl" style="font-size:9.5px;margin-top:4px">Apache Tika<br>Extraction
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Groq AI Cloud -->
+                        <div class="arch-col">
+                            <div style="font-size:18px;color:#2a4a6a;text-align:center;margin-bottom:4px">→</div>
+                            <div class="arch-node">
+                                <div
+                                    style="position:relative;width:72px;height:62px;display:flex;align-items:center;justify-content:center;">
+                                    <svg width="72" height="54" viewBox="0 0 72 54"
+                                        style="position:absolute;top:0;left:0">
+                                        <path
+                                            d="M57 40H15C7 40 3 34 7 27 9 22 13 19 18 20 19 13 25 7 34 7 42 7 48 11 51 17 54 16 60 18 60 24 64 25 64 40 57 40Z"
+                                            fill="#ede9fe" stroke="#7c3aed" stroke-width="2" />
+                                    </svg>
+                                    <div
+                                        style="position:relative;z-index:1;font-size:18px;font-weight:900;color:#7c3aed;letter-spacing:-2px;padding-top:4px">
+                                        gi</div>
+                                </div>
+                                <div class="arch-lbl" style="font-size:9.5px;margin-top:2px">Groq AI<br>Cloud</div>
+                            </div>
+                        </div>
+
+                    </div><!-- /arch-bot -->
+
+                    <!-- Service bar -->
+                    <div class="sbar">
+                        <div class="sbar-s" style="background:#e67e22">Service Layer</div>
+                        <div class="sbar-s" style="background:#2471a3">JPA Repository Layer</div>
+                        <div class="sbar-s" style="background:#27ae60">MySQL Database</div>
+                    </div>
+
+                </div><!-- /arch-flow -->
+                <div class="arch-title">Architecture Overview</div>
+            </div>
+
+            <!-- System Flow -->
+            <div class="flow">
+                <div class="flow-h">System Flow</div>
+                <div class="fi2">
+                    <div class="fn" style="background:#1d4ed8">1</div>
+                    <div><strong>User Registration</strong>
+                        <div class="fsub">Email + password signup</div>
+                    </div>
+                </div>
+                <div class="fi2">
+                    <div class="fn" style="background:#1e40af">2</div>
+                    <div><strong>User Login (JWT Auth)</strong>
+                        <div class="fsub">Token issued on success</div>
+                    </div>
+                </div>
+                <div class="fi2">
+                    <div class="fn" style="background:#15803d">3</div>
+                    <div><strong>Resume Upload</strong>
+                        <div class="fsub">PDF / DOCX file stored</div>
+                    </div>
+                </div>
+                <div class="fi2">
+                    <div class="fn" style="background:#b45309">4</div>
+                    <div><strong>Tika Text Extraction</strong>
+                        <div class="fsub">Raw text parsed from file</div>
+                    </div>
+                </div>
+                <div class="fi2">
+                    <div class="fn" style="background:#7e22ce">5</div>
+                    <div><strong>AI Analysis (Llama 3)</strong>
+                        <div class="fsub">Groq API scores & gaps</div>
+                    </div>
+                </div>
+                <div class="fi2">
+                    <div class="fn" style="background:#166534">6</div>
+                    <div><strong>Display Results</strong>
+                        <div class="fsub">Score, gaps, suggestions</div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /bot-row -->
+
+    </div><!-- /slide -->
+
+    <script>
+        function downloadImage() {
+            const btn = document.querySelector('.dl-btn');
+            btn.style.display = 'none';
+            html2canvas(document.getElementById('slide'), {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'Resume_Analyzer_Architecture.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                btn.style.display = '';
+            });
+        }
+    </script>
+</body>
+
+</html>

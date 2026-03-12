@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "keywords": {
     "Java": ["Spring Boot", "JPA", "Hibernate", "Maven", "Gradle"],
     "React": ["Redux", "Hooks", "Vite", "Next.js", "Context API"],
@@ -10,4 +11,20 @@
     "Frontend Developer": ["React", "JavaScript", "HTML", "CSS", "TypeScript"],
     "Backend Developer": ["Java", "Node.js", "Python", "SQL", "REST API", "Microservices"]
   }
+=======
+  "roles": {
+    "Software Engineer": [
+      "Java", "Python", "JavaScript", "React", "Spring Boot", "Git", "Docker", "Kubernetes", "SQL", "NoSQL", "AWS", "Azure", "CI/CD"
+    ],
+    "Data Scientist": [
+      "Python", "R", "SQL", "Machine Learning", "Deep Learning", "Pandas", "NumPy", "TensorFlow", "PyTorch", "Tableau"
+    ],
+    "Product Manager": [
+      "Agile", "Scrum", "Jira", "Product Roadmap", "User Research", "A/B Testing", "Data Analysis", "Stakeholder Management"
+    ]
+  },
+  "softSkills": [
+    "Communication", "Leadership", "Problem Solving", "Teamwork", "Time Management", "Adaptability"
+  ]
+>>>>>>> a2a91e155ca4fe4dea75b5972fc1c95dc61e1de2
 }
