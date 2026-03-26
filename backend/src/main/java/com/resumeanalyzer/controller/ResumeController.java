@@ -14,6 +14,11 @@ public class ResumeController {
 
     private final ResumeService resumeService;
 
+    @GetMapping("/")
+    public ResponseEntity<String> root() {
+        return ResponseEntity.ok("Resume Analyzer API is up");
+    }
+
     @PostMapping("/analyze")
     public ResponseEntity<?> analyzeResume(@RequestParam("file") MultipartFile file) {
         try {
