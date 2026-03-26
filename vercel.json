@@ -1,0 +1,20 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "functions": {
+    "api/**": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  },
+  "env": {
+    "VITE_API_BASE": "@vite_api_base"
+  },
+  "redirects": [
+    {
+      "source": "/api/:match*",
+      "destination": "http://localhost:8080/api/:match*"
+    }
+  ]
+}
