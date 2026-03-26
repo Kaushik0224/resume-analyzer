@@ -19,10 +19,16 @@ public class ResumeController {
         return ResponseEntity.ok("Resume Analyzer API is up");
     }
 
-    @PostMapping("/analyze")
-    public ResponseEntity<?> analyzeResume(@RequestParam("file") MultipartFile file) {
+    @PostMapping({"/analyze", "/resume/analyze"})
+    public ResponseEntity<?> analyzeResume(
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam(value = "resume", required = false) MultipartFile resumeFile) {
         try {
-            ResumeResult result = resumeService.processResume(file);
+            MultipartFile upload = (file != null) ? file : resumeFile;
+            if (upload == null || upload.isEmpty()) {
+                return ResponseEntity.badRequest().body("No file uploaded");
+            }
+            ResumeResult result = resumeService.processResume(upload);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();

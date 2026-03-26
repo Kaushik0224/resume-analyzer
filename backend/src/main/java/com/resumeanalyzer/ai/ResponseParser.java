@@ -26,6 +26,7 @@ public class ResponseParser {
 
             result.setScore(root.path("score").asInt(0));
             result.setSkills(root.path("skills").toString());
+            result.setMissingSkills(root.path("missingSkills").toString());
             result.setSuggestions(root.path("suggestions").toString());
 
             return result;
@@ -33,6 +34,7 @@ public class ResponseParser {
             System.err.println("JSON Parse Error: " + e.getMessage());
             result.setScore(0);
             result.setSkills("[]");
+            result.setMissingSkills("[]");
             result.setSuggestions("[\"Failed to parse AI response\"]");
             return result;
         }
