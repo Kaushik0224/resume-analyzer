@@ -11,4 +11,5 @@ WORKDIR /app
 COPY --from=build /app/backend/target/resume-analyzer-backend-1.0.0.jar ./resume-analyzer-backend.jar
 EXPOSE 8080
 ENV JAVA_OPTS="-Xms256m -Xmx512m"
+ENV SPRING_PROFILES_ACTIVE=prod
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/resume-analyzer-backend.jar"]
