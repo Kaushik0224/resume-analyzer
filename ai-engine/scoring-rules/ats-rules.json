@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
     "weights": {
         "skills_match": 40,
         "experience_relevance": 25,
@@ -7,16 +6,6 @@
         "keyword_density": 10,
         "structure_score": 5
     },
-    "penalties": {
-        "missing_education": -10,
-        "no_contact_info": -15,
-        "formatting_errors": -5
-    },
-    "thresholds": {
-        "strong_hire": 85,
-        "potential_hire": 70,
-        "needs_improvement": 50
-=======
     "scoringWeights": {
         "keywordDensity": 0.40,
         "quantifiableMetrics": 0.30,
@@ -24,6 +13,9 @@
         "actionVerbs": 0.10
     },
     "penalties": {
+        "missing_education": -10,
+        "no_contact_info": -15,
+        "formatting_errors": -5,
         "missingContactInfo": -10,
         "longParagraphs": -5,
         "buzzwordOverload": -5,
@@ -34,9 +26,11 @@
         "certificationsPresent": 5
     },
     "thresholds": {
+        "strong_hire": 85,
+        "potential_hire": 70,
+        "needs_improvement": 50,
         "excellent": 80,
         "good": 60,
         "needsImprovement": 40
->>>>>>> a2a91e155ca4fe4dea75b5972fc1c95dc61e1de2
     }
 }

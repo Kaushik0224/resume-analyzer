@@ -5,6 +5,14 @@ const UploadBox = ({ onUpload }) => {
     const [dragActive, setDragActive] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
 
+    const handleFile = useCallback((file) => {
+        setSelectedFile(file);
+        // Simulate slight delay before starting upload visually
+        setTimeout(() => {
+            onUpload(file);
+        }, 600);
+    }, [onUpload]);
+
     const handleDrag = useCallback((e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -22,21 +30,13 @@ const UploadBox = ({ onUpload }) => {
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             handleFile(e.dataTransfer.files[0]);
         }
-    }, []);
+    }, [handleFile]);
 
     const handleChange = (e) => {
         e.preventDefault();
         if (e.target.files && e.target.files[0]) {
             handleFile(e.target.files[0]);
         }
-    };
-
-    const handleFile = (file) => {
-        setSelectedFile(file);
-        // Simulate slight delay before starting upload visually
-        setTimeout(() => {
-            onUpload(file);
-        }, 600);
     };
 
     return (
