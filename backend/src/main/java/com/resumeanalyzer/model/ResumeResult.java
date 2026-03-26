@@ -20,6 +20,9 @@ public class ResumeResult {
     @Column(columnDefinition = "TEXT")
     private String skills; // Stored as comma-separated or JSON
 
+    @Column(name = "missing_skills", columnDefinition = "TEXT")
+    private String missingSkills; // Stored as JSON or text
+
     @Column(columnDefinition = "TEXT")
     private String suggestions; // Stored as JSON or text
 

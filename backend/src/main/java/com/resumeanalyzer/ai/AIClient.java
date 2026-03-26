@@ -38,7 +38,8 @@ public class AIClient {
 
         Map<String, String> systemMessage = new HashMap<>();
         systemMessage.put("role", "system");
-        systemMessage.put("content", "You are an expert AI recruiter. Output valid JSON only.");
+        systemMessage.put("content",
+                "You are an elite Fortune 500 tech recruiter and ATS expert. Your goal is to transform resumes into absolute gold mines for recruiters. Output valid JSON only and follow strict schema constraints without extra markdown.");
 
         Map<String, String> userMessage = new HashMap<>();
         userMessage.put("role", "user");

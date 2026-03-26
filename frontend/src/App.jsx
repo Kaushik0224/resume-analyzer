@@ -260,16 +260,18 @@ function UploadBox({ onAnalyze }) {
 
     setLoading(true);
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("resume", file);
 
     try {
-      const res = await fetch("http://localhost:8080/api/analyze", {
+      const apiBase = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+      const res = await fetch(`${apiBase}/analyze`, {
         method: "POST",
         body: formData,
       });
       const data = await res.json();
       onAnalyze(data);
-    } catch {
+    } catch (err) {
+      console.error("Resume upload error:", err);
       alert("Analysis failed. Backend might be down.");
     } finally {
       setLoading(false);
